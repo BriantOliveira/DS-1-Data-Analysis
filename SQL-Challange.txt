@@ -1,0 +1,110 @@
+1) Write a query that gets the company name, founding date, acquirer name, and acquisition date from the crunchbase database.  
+
+SELECT comp.name, comp.founded_at, acq.acquirer_name
+FROM tutorial.crunchbase_companies comp
+JOIN tutorial.crunchbase_acquisitions acq
+ON comp.name = acq.company_name
+GROUP BY comp.name, comp.founded_at, acq.acquirer_name, acq.price_amount
+ORDER by acq.price_amount 
+
+2) Companies from which 10 cities have the highest average acquisition amount?
+
+SELECT AVG(acq.price_amount), comp.name
+FROM tutorial.crunchbase_companies comp
+JOIN tutorial.crunchbase_acquisitions acq
+ON comp.name = acq.company_name
+GROUP BY comp.name
+ORDER BY AVG(acq.price_amount) DESC
+LIMIT 10
+
+3) Write a query (or queries) that compares the average amount of investment raised by companies in SF per quarter to companies in NYC.
+
+SELECT AVG(inves.raised_amount_usd), comp.name, inves.funded_quarter
+FROM tutorial.crunchbase_companies comp
+JOIN tutorial.crunchbase_investments inves
+ON comp.name = inves.company_name
+WHERE comp.city = 'San Francisco'
+GROUP BY comp.name, inves.funded_quarter
+ORDER BY AVG(inves.raised_amount_usd) ASC
+LIMIT 10
+
+SELECT AVG(inves.raised_amount_usd), comp.name, inves.funded_quarter
+FROM tutorial.crunchbase_companies comp
+JOIN tutorial.crunchbase_investments inves
+ON comp.name = inves.company_name
+WHERE comp.city = 'NY'
+GROUP BY comp.name, inves.funded_quarter
+ORDER BY AVG(inves.raised_amount_usd) ASC
+LIMIT 10
+
+4)What is the max/min/average amount of investment money raised by companies in SF that have been acquired at some point?
+
+
+SELECT MAX(raised_amount_usd), inves.company_name, acq.acquired_at
+FROM tutorial.crunchbase_investments inves
+JOIN tutorial.crunchbase_acquisitions  acq
+ON inves.company_name = acq.company_name
+WHERE inves.company_city = 'San Francisco'
+GROUP BY inves.company_name, acq.acquired_at
+ORDER BY MAX(raised_amount_usd) ASC
+
+SELECT MIN(raised_amount_usd), inves.company_name, acq.acquired_at
+FROM tutorial.crunchbase_investments inves
+JOIN tutorial.crunchbase_acquisitions  acq
+ON inves.company_name = acq.company_name
+WHERE inves.company_city = 'San Francisco'
+GROUP BY inves.company_name, acq.acquired_at
+ORDER BY MAX(raised_amount_usd) ASC
+
+SELECT AVG(raised_amount_usd), inves.company_name, acq.acquired_at
+FROM tutorial.crunchbase_investments inves
+JOIN tutorial.crunchbase_acquisitions  acq
+ON inves.company_name = acq.company_name
+WHERE inves.company_city = 'San Francisco'
+GROUP BY inves.company_name, acq.acquired_at
+ORDER BY MAX(raised_amount_usd) ASC
+
+
+5)Which top 3 categories of crime are most likely to go unresolved in Mission District?
+
+SELECT category, incidnt_num, pd_district
+FROM tutorial.sf_crime_incidents_cleandate 
+WHERE pd_district = 'MISSION'
+ORDER BY pd_district ASC
+LIMIT 3
+
+6) What is the max/min/average amount of investment money raised by companies in SF that have been acquired at some point?
+
+SELECT MAX(raised_amount_usd), inves.company_name, aqc.acquired_at
+FROM tutorial.crunchbase_investments inves
+JOIN tutorial.crunchbase_acquisitions aqc
+ON inves.company_name = aqc.company_name
+WHERE inves.company_city = 'San Francisco'
+GROUP BY  inves.company_name, aqc.company_name, aqc.acquired_at
+ORDER BY MAX(raised_amount_usd) ASC
+
+SELECT MIN(raised_amount_usd), inves.company_name, aqc.acquired_at
+FROM tutorial.crunchbase_investments inves
+JOIN tutorial.crunchbase_acquisitions aqc
+ON inves.company_name = aqc.company_name
+WHERE inves.company_city = 'San Francisco'
+GROUP BY  inves.company_name, aqc.company_name, aqc.acquired_at
+ORDER BY MAX(raised_amount_usd) ASC
+
+SELECT AVG(raised_amount_usd), inves.company_name, aqc.acquired_at
+FROM tutorial.crunchbase_investments inves
+JOIN tutorial.crunchbase_acquisitions aqc
+ON inves.company_name = aqc.company_name
+WHERE inves.company_city = 'San Francisco'
+GROUP BY  inves.company_name, aqc.company_name, aqc.acquired_at
+ORDER BY MAX(raised_amount_usd) ASC
+
+7) In SF, what pd_district am I most likely to have my car stolen, and on what day of the week is this most likely?
+
+SELECT pd_district, day_of_week
+FROM tutorial.sf_crime_incidents_cleandate 
+
+8) 
+
+
+
